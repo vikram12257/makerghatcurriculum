@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MakerGhat Resources</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Parkinsans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --purple:#4A3A80; --plum:#2C254F; --lilac:#F1EEF9;
+    --cream:#FFF9E6; --peach:#FDEAE5; --orange:#F4A27C;
+    --ink:#1d1a2b; --muted:#6b6485; --line:#e9e3f3; --white:#fff;
+    --shadow:0 4px 6px -2px rgba(0,0,0,.2);
+    --radius:20px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Parkinsans",system-ui,sans-serif;color:var(--ink);background:#fff;font-size:16px;line-height:1.5}
+  button,input{font:inherit}
+  a{color:inherit}
+
+  /* Header */
+  header{display:flex;align-items:center;justify-content:space-between;max-width:1280px;margin:0 auto;padding:18px 32px}
+  .logo{display:flex;align-items:center;gap:8px;text-decoration:none;font-weight:700;color:var(--plum);line-height:1;font-size:20px}
+  .logo img{height:44px}
+  nav ul{display:flex;gap:28px;list-style:none;margin:0;padding:0;font-size:15px}
+  nav li{white-space:nowrap}
+  nav li.active{font-weight:700}
+  nav .car::after{content:" ▾"}
+  @media (max-width:980px){nav{display:none}}
+
+  /* Folder tabs + shell */
+  .shell{max-width:1280px;margin:24px auto 80px;padding:0 32px}
+  .folder-tabs{display:flex;gap:0}
+  .folder-tabs a{display:block;padding:15px 80px;border-radius:20px 20px 0 0;text-decoration:none;font-size:16px;border:1px solid #f3e6c9;border-bottom:none}
+  .folder-tabs a.fw{background:var(--peach)}
+  .folder-tabs a.rs{background:var(--cream);font-weight:600;margin-left:-6px}
+  .panel{background:var(--cream);border-radius:0 20px 20px 20px;overflow:hidden;border:1px solid #f3e6c9}
+
+  .intro{text-align:center;padding:72px 48px 64px;position:relative}
+  .intro h2{color:var(--purple);font-size:36px;margin:0 0 16px;line-height:1.2}
+  .intro p{max-width:900px;margin:0 auto}
+  .stripes{position:absolute;right:56px;top:40px;display:grid;gap:8px}
+  .stripes i{display:block;height:8px;width:48px;border-radius:4px;background:#f5d98a;opacity:.8}
+  .stripes i:nth-child(2){width:36px}
+
+  .resources{background:var(--peach);border-radius:var(--radius);padding:60px 48px 64px;margin:0 0 0}
+  .resources h2{text-align:center;color:var(--plum);font-size:36px;margin:0 0 12px;line-height:1.2}
+  .resources .lede{text-align:center;max-width:900px;margin:0 auto 32px}
+
+  /* ===== New filter ===== */
+  .mode{display:flex;justify-content:center;margin-bottom:22px}
+  .mode-switch{display:inline-flex;background:var(--white);border-radius:50px;padding:6px;box-shadow:var(--shadow);gap:4px}
+  .mode-switch button{border:0;background:transparent;color:var(--purple);padding:12px 26px;border-radius:50px;cursor:pointer;font-weight:500;display:flex;align-items:center;gap:8px;transition:background .15s,color .15s}
+  .mode-switch button svg{width:18px;height:18px}
+  .mode-switch button[aria-selected="true"]{background:var(--purple);color:#fff}
+  .mode-switch button:not([aria-selected="true"]):hover{background:var(--lilac)}
+
+  .filter-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px 28px;max-width:1040px;margin:0 auto 36px}
+  .search{position:relative;margin-bottom:18px}
+  .search svg{position:absolute;left:18px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--purple)}
+  .search input{width:100%;border:1.5px solid var(--line);background:#fcfbff;border-radius:50px;padding:13px 44px 13px 46px;font-size:15px;color:var(--ink);outline:none}
+  .search input:focus{border-color:var(--purple);background:#fff}
+  .search .x{position:absolute;right:12px;top:50%;transform:translateY(-50%);border:0;background:var(--lilac);color:var(--purple);border-radius:50%;width:26px;height:26px;cursor:pointer;display:none}
+  .search.has .x{display:block}
+
+  .group{display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:start;padding:12px 0;border-top:1px dashed var(--line)}
+  .group:first-of-type{border-top:0}
+  .group > span{font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;padding-top:8px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{border:1.5px solid var(--line);background:#fff;color:var(--plum);padding:7px 15px;border-radius:50px;cursor:pointer;font-size:14px;transition:all .15s;white-space:nowrap}
+  .chip:hover{border-color:var(--purple)}
+  .chip[aria-pressed="true"]{background:var(--purple);border-color:var(--purple);color:#fff}
+  .chip .n{opacity:.6;font-size:12px;margin-left:4px}
+  .chip[aria-pressed="true"] .n{opacity:.8}
+  @media (max-width:640px){.group{grid-template-columns:1fr}.group > span{padding-top:0}}
+
+  .status{display:flex;justify-content:space-between;align-items:center;max-width:1040px;margin:-16px auto 20px;font-size:14px;color:var(--muted);padding:0 4px}
+  .status b{color:var(--plum)}
+  .clear{border:0;background:none;color:var(--purple);font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px;padding:0}
+
+  /* Topic results */
+  .topics{max-width:1040px;margin:0 auto;display:grid;gap:12px}
+  .topic-acc{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+  .topic-acc summary{list-style:none;display:flex;align-items:center;gap:12px;padding:16px 22px;cursor:pointer;user-select:none}
+  .topic-acc summary::-webkit-details-marker{display:none}
+  .topic-acc summary:hover{background:#fcfbff}
+  .topic-acc .tn{color:var(--purple);font-weight:600;font-size:17px}
+  .topic-acc .cnt{font-size:13px;color:var(--muted);background:var(--lilac);border-radius:50px;padding:2px 10px}
+  .topic-acc .chev{margin-left:auto;width:18px;height:18px;color:var(--purple);transition:transform .2s;flex-shrink:0}
+  .topic-acc[open] .chev{transform:rotate(180deg)}
+  .topic-acc[open] summary{border-bottom:1px dashed var(--line)}
+  .acts{list-style:none;margin:0;padding:14px 22px 20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px}
+  .acts .act{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;border-radius:12px;background:#fcfbff;border:1px solid var(--line);font-size:14px}
+  .acts .act .name{font-weight:500;color:var(--plum);line-height:1.3}
+  .acts .act .tag{font-size:11px;padding:2px 9px;flex-shrink:0}
+  .meta{display:flex;flex-wrap:wrap;gap:6px;font-size:12px}
+  .tag{border-radius:50px;padding:3px 10px;font-weight:500}
+  .lv-Beginner{background:#FFF1C7;color:#7a5a00}
+  .lv-Intermediate{background:var(--peach);color:#9a3f21}
+  .lv-Advanced{background:var(--lilac);color:var(--purple)}
+
+  /* Handbook results */
+  .books{display:grid;grid-template-columns:repeat(3,1fr);gap:40px 32px;max-width:1040px;margin:0 auto}
+  @media (max-width:860px){.books{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:520px){.books{grid-template-columns:1fr}}
+  .book{text-align:center;text-decoration:none;color:var(--ink)}
+  .book .cover{display:block;width:200px;max-width:100%;aspect-ratio:1/1.414;margin:0 auto 14px;border-radius:6px;overflow:hidden;box-shadow:0 8px 18px -8px rgba(44,37,79,.45);background:#fff;transition:transform .2s}
+  .book:hover .cover{transform:translateY(-4px)}
+  .book img{width:100%;height:100%;object-fit:cover;display:block}
+  .book .t{font-size:15px;max-width:240px;margin:0 auto;line-height:1.4}
+  .book .s{font-size:15px;max-width:240px;margin:2px auto 0;line-height:1.4}
+
+  .empty{text-align:center;padding:40px 16px;color:var(--muted)}
+  .empty b{display:block;color:var(--plum);font-size:18px;margin-bottom:4px}
+  mark{background:#FFE58A;color:inherit;border-radius:3px;padding:0 1px}
+
+  /* FAQ */
+  .faq{padding:64px 48px}
+  .faq h2{text-align:center;color:var(--purple);font-size:36px;margin:0 0 28px}
+  .faq details{background:#fff;border-radius:20px;box-shadow:var(--shadow);padding:16px 20px;max-width:900px;margin:0 auto 14px;font-weight:600;font-size:14px}
+  .faq summary{list-style:none;display:flex;justify-content:space-between;cursor:pointer}
+  .faq summary::after{content:"▼";font-size:12px}
+
+  footer{background:#4A3A80;color:#fff;margin-top:-1px}
+  footer .sky{display:block;width:100%;background:#fff}
+  footer .inner{max-width:1280px;margin:0 auto;padding:24px 32px 40px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px}
+  footer h4{font-size:40px;margin:0;line-height:1.1}
+  footer small{opacity:.85}
+
+  @media (max-width:640px){
+    header,.shell{padding-left:16px;padding-right:16px}
+    .folder-tabs a{padding:12px 28px}
+    .intro,.resources,.faq{padding-left:16px;padding-right:16px}
+    .intro h2,.resources h2,.faq h2{font-size:28px}
+    .stripes{display:none}
+    .mode-switch button{padding:10px 14px;font-size:14px}
+    .filter-card{padding:18px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="https://makerghat.org/"><img src="https://makerghat.org/static/media/Logo.5a7b0f62d202001b5035e772587ffdb1.svg" alt="MakerGhat"></a>
+  <nav><ul>
+    <li class="car">About Us</li><li class="car">Space</li><li class="car active">Curriculum</li>
+    <li>Training</li><li class="car">Evidence</li><li class="car">Programs</li><li class="car">Get Involved</li>
+  </ul></nav>
+</header>
+
+<div class="shell">
+  <div class="folder-tabs">
+    <a class="fw" href="#">Framework</a>
+    <a class="rs" href="#">Resources</a>
+  </div>
+  <div class="panel">
+    <section class="intro">
+      <div class="stripes"><i></i><i></i><i></i></div>
+      <h2>How do we bring these skills to life?</h2>
+      <p>Our activities are designed to connect science with creativity, and ideas with real-world purpose. Through making and iteration, students don’t just learn; they discover, try, fail, and grow. This process helps them move from passive learning to active problem-solving, making each session deeply engaging and meaningful.</p>
+    </section>
+
+    <section class="resources" id="resources">
+      <h2 id="resTitle">Explore our resources</h2>
+      <p class="lede" id="resLede"></p>
+
+      <div class="mode">
+        <div class="mode-switch" role="tablist" aria-label="Search mode">
+          <button role="tab" id="tabTopic" aria-selected="true" data-mode="topic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg>
+            Search by Topic
+          </button>
+          <button role="tab" id="tabBook" aria-selected="false" data-mode="book">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5v14zM20 17v4H6.5"/></svg>
+            Search by Handbook
+          </button>
+        </div>
+      </div>
+
+      <div class="filter-card">
+        <div class="search" id="searchWrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="q" type="search" autocomplete="off">
+          <button class="x" id="qx" aria-label="Clear search">✕</button>
+        </div>
+        <div id="groups"></div>
+      </div>
+
+      <div class="status"><span id="count"></span><button class="clear" id="clearAll">Clear all filters</button></div>
+      <div id="results" aria-live="polite"></div>
+    </section>
+
+    <section class="faq">
+      <h2>Your guide to our resources</h2>
+      <details><summary>Why does MakerGhat share their customised curriculum as open resources?</summary></details>
+      <details><summary>How can I download MakerGhat's open sources and reports?</summary></details>
+      <details><summary>How can I use the activities once I download them?</summary></details>
+      <details><summary>Can I adapt or modify any of the activities I download?</summary></details>
+      <details><summary>Can I collaborate with MakerGhat to co-create or scale these activities?</summary></details>
+      <details><summary>Can I embed MakerGhat curriculum and activities on my website?</summary></details>
+    </section>
+  </div>
+</div>
+
+<footer>
+  <img class="sky" src="https://makerghat.org/static/media/footer.f85bcf60b66e5ac8ec2be55323ae1187.svg" alt="">
+  <div class="inner">
+    <h4>Connect<br>with Us</h4>
+    <small>MakerGhat and its assets are licensed under CC BY-SA 4.0</small>
+  </div>
+</footer>
+
+<script>
+const DATA = {"acts": [{"t": "Artificial Intelligence (AI)", "n": "Data", "l": "Beginner", "g": []}, {"t": "Artificial Intelligence (AI)", "n": "Data, Organisation & Patterns", "l": "Beginner", "g": []}, {"t": "Cardboard Mechanics", "n": "Gear Mechanism", "l": "Beginner", "g": [4, 5, 6, 7, 8]}, {"t": "Cardboard Mechanics", "n": "Cardboard Automata", "l": "Intermediate", "g": [5, 6, 7, 8]}, {"t": "Cardboard Mechanics", "n": "Art-O-Matic: Drawing Fun with Machines", "l": "Advanced", "g": [5, 6, 7, 8, 9]}, {"t": "Cardboard Mechanics", "n": "Robotic Arm", "l": "Intermediate", "g": [6, 7, 8, 9, 10]}, {"t": "Cardboard Mechanics", "n": "DIY Grabber", "l": "Beginner", "g": [3, 4, 5, 6, 7]}, {"t": "Cardboard Mechanics", "n": "Hydraulic Systems", "l": "Advanced", "g": [7, 8, 9]}, {"t": "Cardboard Mechanics", "n": "DIY Carnival Fun: Cardboard Edition", "l": "Intermediate", "g": [7, 8, 9, 10]}, {"t": "Design Thinking", "n": "Introduction to Design Thinking – Ideal Wallet", "l": "Beginner", "g": [6, 7, 8, 9, 10]}, {"t": "Design Thinking", "n": "Everyday Innovation", "l": "Beginner", "g": [6, 7, 8, 9, 10]}, {"t": "Design Thinking", "n": "Introduction to Product Design – SCAMPER", "l": "Intermediate", "g": [8, 9, 10]}, {"t": "Design Thinking", "n": "Product Design – Re-engineer the Paper Clip", "l": "Intermediate", "g": [8, 9, 10]}, {"t": "Design Thinking", "n": "Design Thinking for Water Conservation", "l": "Intermediate", "g": [8, 9, 10]}, {"t": "Design Thinking", "n": "Design Thinking for Classroom Improvements", "l": "Intermediate", "g": [8, 9, 10]}, {"t": "Design Thinking", "n": "Giving Feedback", "l": "Intermediate", "g": [6, 7, 8, 9, 10]}, {"t": "Electronics", "n": "Paper Circuits", "l": "Beginner", "g": []}, {"t": "Electronics", "n": "Breadboard: Series and parallel circuit", "l": "Beginner", "g": []}, {"t": "Electronics", "n": "Traffic Light", "l": "Beginner", "g": []}, {"t": "Electronics", "n": "Scribble Bot", "l": "Intermediate", "g": []}, {"t": "Electronics", "n": "Introduction to Arduino & Fire Alarm", "l": "Intermediate", "g": []}, {"t": "Electronics", "n": "Soil Moisture Sensing Circuit", "l": "Intermediate", "g": []}, {"t": "Electronics", "n": "Relay Control for Water Pump", "l": "Intermediate", "g": []}, {"t": "Electronics", "n": "Automated Irrigation Pump", "l": "Intermediate", "g": []}, {"t": "Internet of Things (IoT)", "n": "Introduction to Microcontrollers", "l": "Beginner", "g": [8, 9, 10]}, {"t": "Internet of Things (IoT)", "n": "Fire Alarm", "l": "Beginner", "g": [8, 9, 10]}, {"t": "Internet of Things (IoT)", "n": "Smart Stick for Visually Impaired People", "l": "Beginner", "g": [8, 9, 10]}, {"t": "Internet of Things (IoT)", "n": "ESP32 LED Blinking", "l": "Beginner", "g": [8, 9, 10]}, {"t": "Internet of Things (IoT)", "n": "Wi-Fi Scanning", "l": "Intermediate", "g": [9, 10]}, {"t": "Internet of Things (IoT)", "n": "Plant Monitoring using IoT with ESP32", "l": "Intermediate", "g": [9, 10]}, {"t": "Internet of Things (IoT)", "n": "IoT Weather Station using ESP32", "l": "Intermediate", "g": [9, 10]}, {"t": "Internet of Things (IoT)", "n": "MicroPython OLED Display", "l": "Intermediate", "g": [9, 10]}, {"t": "Internet of Things (IoT)", "n": "Industrial IoT – Pipeline Gas Leakage Monitoring", "l": "Advanced", "g": [9, 10]}, {"t": "Internet of Things (IoT)", "n": "IoT Health Monitoring using ESP32", "l": "Advanced", "g": [9, 10]}, {"t": "Internet of Things (IoT)", "n": "NTP Clock using LCD", "l": "Advanced", "g": [9, 10]}, {"t": "Internet of Things (IoT)", "n": "HTTP Server", "l": "Advanced", "g": [10]}, {"t": "Life Science", "n": "Stethoscope", "l": "Beginner", "g": []}, {"t": "Life Science", "n": "DIY Lung Model", "l": "Intermediate", "g": [7, 8]}, {"t": "Physical Science", "n": "DIY Periscope", "l": "Beginner", "g": [6, 7, 8]}, {"t": "Physical Science", "n": "Anemometer", "l": "Intermediate", "g": [6, 7, 8]}, {"t": "Physical Science", "n": "Parachute", "l": "Intermediate", "g": [6, 7, 8]}, {"t": "Physical Science", "n": "Wind anemometer", "l": "Intermediate", "g": [8, 9, 10]}, {"t": "Physical Science", "n": "DIY Litmus Paper", "l": "Beginner", "g": [6, 7, 8]}, {"t": "Physical Science", "n": "Shadow Theatre", "l": "Beginner", "g": [6, 7, 8]}, {"t": "Physical Science", "n": "Seismograph", "l": "Intermediate", "g": [7, 8, 9, 10]}, {"t": "Physical Science", "n": "Phenakistoscope", "l": "Intermediate", "g": [5, 6, 7, 8]}, {"t": "Physical Science", "n": "Balloon Car", "l": "Beginner", "g": [5, 6, 7, 8]}, {"t": "Physical Science", "n": "DIY Centrifuge", "l": "Intermediate", "g": [7, 8, 9]}, {"t": "Physical Science", "n": "Balloon Rocket", "l": "Intermediate", "g": [6, 7, 8]}, {"t": "Physical Science", "n": "DIY Microscope", "l": "Intermediate", "g": [7, 8, 9]}, {"t": "Physical Science", "n": "Kaleidoscope", "l": "Intermediate", "g": [7, 8, 9]}, {"t": "Sustainability", "n": "DIY Sanitary Napkins", "l": "Intermediate", "g": []}, {"t": "Sustainability", "n": "Water Filter", "l": "Beginner", "g": []}, {"t": "Sustainability", "n": "DIY Solar Oven", "l": "Intermediate", "g": []}, {"t": "Sustainability", "n": "Drip Irrigation", "l": "Beginner", "g": []}, {"t": "Sustainability", "n": "Rainwater Harvesting", "l": "Intermediate", "g": []}, {"t": "Sustainability", "n": "Seed Bombing", "l": "Beginner", "g": []}, {"t": "Sustainability", "n": "Waste Water Management", "l": "Advanced", "g": []}, {"t": "Sustainability", "n": "Hydroponics", "l": "Intermediate", "g": []}, {"t": "3D Printing", "n": "Introduction to 3D Printing", "l": "Beginner", "g": []}, {"t": "3D Printing", "n": "Design a Personalised Keychain", "l": "Beginner", "g": []}, {"t": "3D Printing", "n": "Design a Mini Planter", "l": "Intermediate", "g": []}, {"t": "3D Printing", "n": "Design a Phone Stand", "l": "Intermediate", "g": []}, {"t": "3D Printing", "n": "Design and Print a Desk Organiser", "l": "Intermediate", "g": []}, {"t": "3D Printing", "n": "Design and Print a Functional Mechanical Gear", "l": "Advanced", "g": []}, {"t": "3D Printing", "n": "Design and Print a Walking Robot", "l": "Advanced", "g": []}], "hb": [{"n": "ATL Tinkering Curriculum Handbook – Level 1", "s": "Developed for ATL, India"}, {"n": "ATL Tinkering Curriculum Handbook – Level 2", "s": "Developed for ATL, India"}, {"n": "ATL Tinkering Curriculum Handbook – Level 3", "s": "Developed for ATL, India"}, {"n": "Maker Mindset Handbook - Grade 9", "s": "Developed for 5T High Schools, Bargarh District, Odisha"}, {"n": "Maker Mindset Handbook - Grade 9", "s": "Developed for Model School, Tamil Nadu"}, {"n": "Maker Mindset Handbook - Grade 10", "s": "Developed for Model School, Tamil Nadu"}, {"n": "Experiential & Design Thinking Handbook", "s": "Developed for Agastya International Foundation, Bangalore"}, {"n": "Hands-on Experiential Learning Handbook - Grade 8", "s": "Developed for Balasore & Bargarh District, Odisha"}, {"n": "Hands-on Experiential Learning Handbook", "s": "Developed for Namma School Namma Ooru Palli, Tamil Nadu"}, {"n": "Project-Based Learning Handbook", "s": "Developed for the Jhunjhunu District, Rajasthan"}, {"n": "Design & Innovation Handbook", "s": "Developed for the ICT Academy, Kerala"}, {"n": "Life Skills & Hands-On Learning Handbook – Food Processing", "s": "Developed for Adarsha PSEB, Punjab"}, {"n": "Life Skills & Hands-On Learning Handbook – Gardening & Agriculture", "s": "Developed for Adarsha PSEB, Punjab"}, {"n": "Cardboard Mechanics Handbook", "s": "Developed for SPOT, Bangalore"}, {"n": "Internet of Things Handbook", "s": "Developed for SPOT, Bangalore"}, {"n": "Hands-on Experiential Learning Handbook", "s": "Developed for Vidya Makerspace, Bangalore"}, {"n": "Maker Mindset Handbook - Grade 8", "s": "Developed for Government Schools, Odisha"}, {"n": "Maker Mindset Handbook", "s": "Developed for ZP School, Nashik"}]}
+;
+
+const THUMB = "https://makerghat-pdfs.s3.ap-south-1.amazonaws.com/thumbnails/";
+const COVERS = ["3b3b9eec-ea95-428f-98f7-993575091ab7","185948bd-f3c4-48f6-9e6a-7cf39a69b65e","6fbac664-1e7a-4a36-9aab-0a9236fe7a25","f23547f9-679e-45fb-858c-e53e436806d9","0b2e6ea9-82f7-4d1c-8beb-80cd13a045b1","b3aa0db4-abaa-4f3e-9e2c-905fc7b3d2ad","183de7fd-97c7-4040-b8ba-7814b992e0c0","141af6dd-97f3-4bd8-80ef-c313e38d0f55","f6acd9f9-1c7a-4ce5-91b3-88c98a066cb0","24936fe8-44da-47a8-ac85-bc0bf2e51c3d","5e7142af-11eb-4cd5-982f-473085f27f3b","7fcb4598-fd33-4363-8247-501afbb54d2b","c45caf6b-14d6-4790-8db5-15700bc6178e","c6e0ada2-80a1-4455-a79a-2971873c5ecb","710d3caf-60a9-41c4-959b-7ee4cfc227a9","589af766-fb88-4729-b446-2d2f8f200deb","e54b05a8-bd06-4bc4-a987-1fde3562942e","4e7a3a0a-6ef8-4aae-9062-fe03eeb345d0"];
+const STATE_OF = s => /ATL/.test(s) ? "ATL (National)" : /Odisha/.test(s) ? "Odisha" : /Tamil Nadu/.test(s) ? "Tamil Nadu"
+  : /Bangalore/.test(s) ? "Karnataka" : /Rajasthan/.test(s) ? "Rajasthan" : /Kerala/.test(s) ? "Kerala"
+  : /Punjab/.test(s) ? "Punjab" : /Nashik/.test(s) ? "Maharashtra" : "Other";
+const SERIES_OF = n => /ATL/.test(n) ? "ATL Tinkering" : /Maker Mindset/.test(n) ? "Maker Mindset"
+  : /Experiential Learning/.test(n) ? "Hands-on Experiential" : /Life Skills/.test(n) ? "Life Skills"
+  : /Design/.test(n) ? "Design & Innovation" : "Specialised Modules";
+DATA.hb.forEach((h,i)=>{h.img = THUMB + COVERS[i] + ".png"; h.state = STATE_OF(h.s); h.series = SERIES_OF(h.n);});
+
+const LEVELS = ["Beginner","Intermediate","Advanced"];
+const TOPICS = [...new Set(DATA.acts.map(a=>a.t))];
+const STATES = [...new Set(DATA.hb.map(h=>h.state))];
+const SERIES = [...new Set(DATA.hb.map(h=>h.series))];
+
+const COPY = {
+  topic: {title:"Explore activities by topic", lede:"Find hands-on activities across science, electronics, sustainability, design and more. Pick a topic or level to narrow things down.", ph:"Search activities, e.g. “gear”, “solar”, “ESP32”…"},
+  book:  {title:"Hand books", lede:"Our handbooks support diverse Maker programs such as ATL Tinkering, project-based learning, and more. Explore handbooks from different states to see how our curriculum is shaping student learning on the ground.", ph:"Search handbooks, partners or places…"}
+};
+
+const state = {mode:"topic", q:"", topic:new Set(), level:new Set(), st:new Set(), series:new Set()};
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const hl = s => { const e = esc(s); if(!state.q) return e; const q = state.q.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"); return e.replace(new RegExp("("+esc(q)+")","ig"),"<mark>$1</mark>"); };
+const match = (txt) => !state.q || txt.toLowerCase().includes(state.q.toLowerCase());
+const openTopics = new Set();
+
+function topicFiltered(skip){
+  return DATA.acts.filter(a =>
+    match(a.n+" "+a.t) &&
+    (skip==="topic" || !state.topic.size || state.topic.has(a.t)) &&
+    (skip==="level" || !state.level.size || state.level.has(a.l)));
+}
+function bookFiltered(skip){
+  return DATA.hb.filter(h =>
+    match(h.n+" "+h.s) &&
+    (skip==="st" || !state.st.size || state.st.has(h.state)) &&
+    (skip==="series" || !state.series.size || state.series.has(h.series)));
+}
+
+function chipGroup(label, key, values, countFn, fmt=v=>v){
+  return `<div class="group"><span>${label}</span><div class="chips">` +
+    values.map(v=>{ const on = state[key].has(v); const n = countFn(v);
+      return `<button class="chip" data-k="${key}" data-v="${esc(String(v))}" aria-pressed="${on}" ${!n&&!on?'style="opacity:.45"':''}>${esc(fmt(v))}<span class="n">${n}</span></button>`;}).join("") +
+    `</div></div>`;
+}
+
+function renderGroups(){
+  let html="";
+  if(state.mode==="topic"){
+    const bt = topicFiltered("topic"), bl = topicFiltered("level");
+    html += chipGroup("Topic","topic",TOPICS, v=>bt.filter(a=>a.t===v).length);
+    html += chipGroup("Level","level",LEVELS, v=>bl.filter(a=>a.l===v).length);
+  } else {
+    const bs = bookFiltered("st"), br = bookFiltered("series");
+    html += chipGroup("State","st",STATES, v=>bs.filter(h=>h.state===v).length);
+    html += chipGroup("Program","series",SERIES, v=>br.filter(h=>h.series===v).length);
+  }
+  $("groups").innerHTML = html;
+}
+
+function renderResults(){
+  const out = $("results"); let n=0;
+  if(state.mode==="topic"){
+    const list = topicFiltered(); n = list.length;
+    const by = TOPICS.map(t=>[t, list.filter(a=>a.t===t)]).filter(([,a])=>a.length);
+    // Topics stay collapsed unless the visitor opened them, or narrowed down via search / topic chips.
+    const autoOpen = t => !!state.q || state.topic.has(t) || by.length===1;
+    out.innerHTML = `<div class="topics">${by.map(([t,acts])=>`
+      <details class="topic-acc" data-t="${esc(t)}" ${(openTopics.has(t)||autoOpen(t))?"open":""}>
+        <summary><span class="tn">${esc(t)}</span><span class="cnt">${acts.length} ${acts.length===1?"activity":"activities"}</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+        <ul class="acts">${acts.map(a=>`
+          <li class="act"><span class="name">${hl(a.n)}</span><span class="tag lv-${a.l}">${a.l}</span></li>`).join("")}</ul>
+      </details>`).join("")}</div>`;
+    $("count").innerHTML = `Showing <b>${n}</b> of ${DATA.acts.length} activities`;
+  } else {
+    const list = bookFiltered(); n = list.length;
+    out.innerHTML = `<div class="books">${list.map(h=>`
+      <a class="book" href="#"><span class="cover"><img src="${h.img}" alt="" loading="lazy"></span>
+        <div class="t">${hl(h.n)}</div><div class="s">${hl(h.s)}</div></a>`).join("")}</div>`;
+    $("count").innerHTML = `Showing <b>${n}</b> of ${DATA.hb.length} handbooks`;
+  }
+  if(!n) out.innerHTML = `<div class="empty"><b>No matches found</b>Try a different word or clear a filter.</div>`;
+  const active = state.q || (state.mode==="topic" ? state.topic.size+state.level.size : state.st.size+state.series.size);
+  $("clearAll").style.visibility = active ? "visible" : "hidden";
+}
+
+function render(){
+  const c = COPY[state.mode];
+  $("resTitle").textContent = c.title; $("resLede").textContent = c.lede; $("q").placeholder = c.ph;
+  $("tabTopic").setAttribute("aria-selected", state.mode==="topic");
+  $("tabBook").setAttribute("aria-selected", state.mode==="book");
+  $("searchWrap").classList.toggle("has", !!state.q);
+  renderGroups(); renderResults();
+}
+
+document.querySelector(".mode-switch").addEventListener("click", e=>{
+  const b = e.target.closest("button"); if(!b || b.dataset.mode===state.mode) return;
+  state.mode = b.dataset.mode; state.q=""; $("q").value=""; render();
+});
+$("groups").addEventListener("click", e=>{
+  const c = e.target.closest(".chip"); if(!c) return;
+  const k = c.dataset.k, v = c.dataset.v;
+  state[k].has(v) ? state[k].delete(v) : state[k].add(v); render();
+});
+$("results").addEventListener("toggle", e=>{
+  const d = e.target; if(!d.matches || !d.matches(".topic-acc")) return;
+  d.open ? openTopics.add(d.dataset.t) : openTopics.delete(d.dataset.t);
+}, true);
+$("q").addEventListener("input", e=>{ state.q = e.target.value.trim(); render(); });
+$("qx").addEventListener("click", ()=>{ state.q=""; $("q").value=""; $("q").focus(); render(); });
+$("clearAll").addEventListener("click", ()=>{ state.q=""; $("q").value=""; ["topic","level","st","series"].forEach(k=>state[k].clear()); render(); });
+
+render();
+</script>
+</body>
+</html>
