@@ -58,6 +58,7 @@
 
   .filter-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px 28px;max-width:1040px;margin:0 auto 36px}
   .search{position:relative;margin-bottom:18px}
+  .search:has(+ #groups[hidden]){margin-bottom:0}
   .search svg{position:absolute;left:18px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--purple)}
   .search input{width:100%;border:1.5px solid var(--line);background:#fcfbff;border-radius:50px;padding:13px 44px 13px 46px;font-size:15px;color:var(--ink);outline:none}
   .search input:focus{border-color:var(--purple);background:#fff}
@@ -217,25 +218,17 @@ const DATA = {"acts": [{"t": "Artificial Intelligence (AI)", "n": "Data", "l": "
 
 const THUMB = "https://makerghat-pdfs.s3.ap-south-1.amazonaws.com/thumbnails/";
 const COVERS = ["3b3b9eec-ea95-428f-98f7-993575091ab7","185948bd-f3c4-48f6-9e6a-7cf39a69b65e","6fbac664-1e7a-4a36-9aab-0a9236fe7a25","f23547f9-679e-45fb-858c-e53e436806d9","0b2e6ea9-82f7-4d1c-8beb-80cd13a045b1","b3aa0db4-abaa-4f3e-9e2c-905fc7b3d2ad","183de7fd-97c7-4040-b8ba-7814b992e0c0","141af6dd-97f3-4bd8-80ef-c313e38d0f55","f6acd9f9-1c7a-4ce5-91b3-88c98a066cb0","24936fe8-44da-47a8-ac85-bc0bf2e51c3d","5e7142af-11eb-4cd5-982f-473085f27f3b","7fcb4598-fd33-4363-8247-501afbb54d2b","c45caf6b-14d6-4790-8db5-15700bc6178e","c6e0ada2-80a1-4455-a79a-2971873c5ecb","710d3caf-60a9-41c4-959b-7ee4cfc227a9","589af766-fb88-4729-b446-2d2f8f200deb","e54b05a8-bd06-4bc4-a987-1fde3562942e","4e7a3a0a-6ef8-4aae-9062-fe03eeb345d0"];
-const STATE_OF = s => /ATL/.test(s) ? "ATL (National)" : /Odisha/.test(s) ? "Odisha" : /Tamil Nadu/.test(s) ? "Tamil Nadu"
-  : /Bangalore/.test(s) ? "Karnataka" : /Rajasthan/.test(s) ? "Rajasthan" : /Kerala/.test(s) ? "Kerala"
-  : /Punjab/.test(s) ? "Punjab" : /Nashik/.test(s) ? "Maharashtra" : "Other";
-const SERIES_OF = n => /ATL/.test(n) ? "ATL Tinkering" : /Maker Mindset/.test(n) ? "Maker Mindset"
-  : /Experiential Learning/.test(n) ? "Hands-on Experiential" : /Life Skills/.test(n) ? "Life Skills"
-  : /Design/.test(n) ? "Design & Innovation" : "Specialised Modules";
-DATA.hb.forEach((h,i)=>{h.img = THUMB + COVERS[i] + ".png"; h.state = STATE_OF(h.s); h.series = SERIES_OF(h.n);});
+DATA.hb.forEach((h,i)=>{h.img = THUMB + COVERS[i] + ".png";});
 
 const LEVELS = ["Beginner","Intermediate","Advanced"];
 const TOPICS = [...new Set(DATA.acts.map(a=>a.t))];
-const STATES = [...new Set(DATA.hb.map(h=>h.state))];
-const SERIES = [...new Set(DATA.hb.map(h=>h.series))];
 
 const COPY = {
   topic: {title:"Explore activities by topic", lede:"Find hands-on activities across science, electronics, sustainability, design and more. Pick a topic or level to narrow things down.", ph:"Search activities, e.g. “gear”, “solar”, “ESP32”…"},
-  book:  {title:"Hand books", lede:"Our handbooks support diverse Maker programs such as ATL Tinkering, project-based learning, and more. Explore handbooks from different states to see how our curriculum is shaping student learning on the ground.", ph:"Search handbooks, partners or places…"}
+  book:  {title:"Hand books", lede:"Our handbooks support diverse Maker programs such as ATL Tinkering, project-based learning, and more. Explore handbooks from different states to see how our curriculum is shaping student learning on the ground.", ph:"Search handbooks by name, partner or place…"}
 };
 
-const state = {mode:"topic", q:"", topic:new Set(), level:new Set(), st:new Set(), series:new Set()};
+const state = {mode:"topic", q:"", topic:new Set(), level:new Set()};
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const hl = s => { const e = esc(s); if(!state.q) return e; const q = state.q.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"); return e.replace(new RegExp("("+esc(q)+")","ig"),"<mark>$1</mark>"); };
@@ -248,11 +241,9 @@ function topicFiltered(skip){
     (skip==="topic" || !state.topic.size || state.topic.has(a.t)) &&
     (skip==="level" || !state.level.size || state.level.has(a.l)));
 }
-function bookFiltered(skip){
-  return DATA.hb.filter(h =>
-    match(h.n+" "+h.s) &&
-    (skip==="st" || !state.st.size || state.st.has(h.state)) &&
-    (skip==="series" || !state.series.size || state.series.has(h.series)));
+// Handbooks are searched by keyword only, no filter chips.
+function bookFiltered(){
+  return DATA.hb.filter(h => match(h.n+" "+h.s));
 }
 
 function chipGroup(label, key, values, countFn, fmt=v=>v){
@@ -268,12 +259,9 @@ function renderGroups(){
     const bt = topicFiltered("topic"), bl = topicFiltered("level");
     html += chipGroup("Topic","topic",TOPICS, v=>bt.filter(a=>a.t===v).length);
     html += chipGroup("Level","level",LEVELS, v=>bl.filter(a=>a.l===v).length);
-  } else {
-    const bs = bookFiltered("st"), br = bookFiltered("series");
-    html += chipGroup("State","st",STATES, v=>bs.filter(h=>h.state===v).length);
-    html += chipGroup("Program","series",SERIES, v=>br.filter(h=>h.series===v).length);
   }
   $("groups").innerHTML = html;
+  $("groups").hidden = !html;
 }
 
 function renderResults(){
@@ -298,7 +286,7 @@ function renderResults(){
     $("count").innerHTML = `Showing <b>${n}</b> of ${DATA.hb.length} handbooks`;
   }
   if(!n) out.innerHTML = `<div class="empty"><b>No matches found</b>Try a different word or clear a filter.</div>`;
-  const active = state.q || (state.mode==="topic" ? state.topic.size+state.level.size : state.st.size+state.series.size);
+  const active = state.q || (state.mode==="topic" ? state.topic.size+state.level.size : 0);
   $("clearAll").style.visibility = active ? "visible" : "hidden";
 }
 
@@ -326,7 +314,7 @@ $("results").addEventListener("toggle", e=>{
 }, true);
 $("q").addEventListener("input", e=>{ state.q = e.target.value.trim(); render(); });
 $("qx").addEventListener("click", ()=>{ state.q=""; $("q").value=""; $("q").focus(); render(); });
-$("clearAll").addEventListener("click", ()=>{ state.q=""; $("q").value=""; ["topic","level","st","series"].forEach(k=>state[k].clear()); render(); });
+$("clearAll").addEventListener("click", ()=>{ state.q=""; $("q").value=""; ["topic","level"].forEach(k=>state[k].clear()); render(); });
 
 render();
 </script>
